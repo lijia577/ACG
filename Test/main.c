@@ -43,14 +43,16 @@ Greedy, choose the step that can the flip the most token
 
 typedef enum  {X=1, O=2, M=3} token;
 
-int board [N][N]={ {O,O,O,0,0,0,0,0},
-                   {O,X,O,0,0,0,0,0},   
-                   {O,O,O,0,0,0,0,0},    
+int board [N][N]={ {0,0,0,0,0,0,0,0},   
+                   {0,0,0,0,0,0,0,0},    
                    {0,0,0,0,0,0,0,0},   
-                   {0,0,0,0,0,0,0,0},  
-                   {0,0,0,0,0,X,X,X}, 
-                   {0,0,0,0,0,X,O,X},  
-                   {0,0,0,0,0,X,X,X}  };
+                   {0,0,0,X,O,0,0,0},    
+                   {0,0,0,O,X,0,0,0},   
+                   {0,0,0,0,0,0,0,0},    
+                   {0,0,0,0,0,0,0,0},   
+                   {0,0,0,0,0,0,0,0} };
+                   
+int flips;
                    
 char getTokenName(int t){
 	switch(t){
@@ -61,14 +63,6 @@ char getTokenName(int t){
 	}
 }
 
-char getTokenNamer(int t){
-	switch(t){
-		case X: return 'X';
-		case O: return 'O';
-		//case M: return 'M';
-		default: return '.';
-	}
-}
 
 
 void print(){
@@ -83,15 +77,12 @@ for(int i = 0; i<N ; i++){
 	}
 }	
 
-void printr(){
-printf("0 1 2 3 4 5 6 7 \n");
+void clear(){
+//printf("0 1 2 3 4 5 6 7 \n");
 for(int i = 0; i<N ; i++){
-
 		for( int j =0; j<N; j++){
-		printf("%c ",getTokenNamer( board[i][j] ) );
-		
+		if(board[i][j] == 3) board[i][j]=0;
 		}
-		printf("%d \n", i);
 	}
 }
 
@@ -205,7 +196,7 @@ int moveExist (int t){//t indicates wethher this is a X or a O
 int fCrawler(int step, int t, int nt, int m, int n){
     if( (step==1) && ((getTokenName(board[m][n]) == '.')||( getTokenName(board[m][n])  == 'M'))) return 1;
    	if(board[m][n]==t) return 1; //if next is same as X, then break
-   	if(board[m][n]==nt) board[m][n]=t;
+   	if(board[m][n]==nt) {board[m][n]=t; flips++;}
    	if( (step>1) && (board[m][n]==t)) return 1;
    	return 0;
 }
@@ -302,16 +293,18 @@ int flip(int t, int nt,int xloc, int yloc){ //t indicates X or O; nt is the oppo
 			m--;
 		}//end diretion upright;
 	
+	printf("flips is %d\n", flips);
+	clear();
     return 0;
 }
 
 
 void main(){
-	//print();
-	//moveExist(1);
-	//print();
-	//flip(1,2,2,4);
-	printr();
+	print();
+	moveExist(1);
+	print();
+	if(flip(1,2,2,4)){printf("Please flip a M !!!\n"); return; }
+	print();
 	moveExist(2);
 	print();
     //printf("%c",getTokenName( board[0][0] ) );
