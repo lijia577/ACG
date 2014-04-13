@@ -2,58 +2,203 @@
 #include <stdlib.h>
 #include "main.h"
 #define N 8
-/* the main task is say you have
 
-. . . . . . . . 
-. . . . . . . .
-. . . . . . . . 
-. . . X 0 . . .
-. . . 0 X . . . 
-. . . . . . . .
-. . . . . . . . 
-. . . . . . . .
-
-It is stored in a two D array with type X,O and null. Aussming that X is going to make a move. 
-Figure out which . should be changed into ? 
-
-
-meHelper explained 
-For each X, explore eight directions:
-step=1;
-while(inBoard)
-if ((step ==1 && current sign =(null or ?)) return (not this direction
-if (cucurent sign is the same, in the case, X ) return (not this direction) 
-//if (current sign is different, in the case, 0)keep going;
-if (current sign is (null or ?) and step!=1) set current to be a question mark. 
- 
- 
-Flip function:
-Next, if the user choose one of the ? marks, then we should flip it. 
-Again, assume that the current thing we are using is X, then explore 8 directrions: 
-	for each direction:
-		if the next token is X and step is 1, then not this direction;
-		if the next token is NUll or Maybe, not this direction;
-		if the next token is O, change it into X;
-		if the next token is X and step is NOT 1, then stop. 
- 
-how to do computer Move:
-Greedy, choose the step that can the flip the most token
-
-*/
 
 typedef enum  {X=1, O=2, M=3} token;
-
+typedef enum  {COUNTONLY,FLIPONLY} mode;
 int board [N][N]={ {0,0,0,0,0,0,0,0},   
-                   {0,0,0,0,0,0,0,0},    
-                   {0,0,0,0,0,0,0,0},   
-                   {0,0,0,X,O,0,0,0},    
-                   {0,0,0,O,X,0,0,0},   
-                   {0,0,0,0,0,0,0,0},    
+                   {0,O,0,0,X,0,0,0},    
+                   {X,O,O,0,X,0,0,0},   
+                   {X,O,X,O,X,0,0,0},   
+                   {X,O,O,X,X,0,0,0},   
+                   {O,O,0,0,0,0,0,0},    
                    {0,0,0,0,0,0,0,0},   
                    {0,0,0,0,0,0,0,0} };
                    
+int computeCount[N][N] = {0};                   
 int flips;
-                   
+
+void main(){
+	print();
+	moveExist(X);
+	print();
+	flip(X,O,6,0,FLIPONLY);
+	clear();
+	print();
+}
+
+//---------------------------
+
+int flip(int t,int nt, int x, int y, int mode){
+	flips=0;
+	if(board[x][y]!=M) {
+		printf("Input coordinates for M is not valid!\n");
+		return -1; //return -1 is M is not valid coordinates
+	}
+	
+	//now, this M looks at eight directions
+	int m,n,step=0;
+	
+	//UP 
+	m=x-1;n=y;step=0;
+	while(m>=0 && (board[m][n]==nt)){ //consume all the opposite symbol
+		m--;
+		step++;
+	}
+	//step >1 means there are opposite symbol, next I should check if last one is the same symbol as t.
+	if(step){
+		if(board[m][n]==t){
+			//start flip: set board[x][y] to be t; flip all the other until out of bound or there is none 
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x-1;n=y;
+			while(m>=0 && (board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m--;
+			}
+		}
+	}//END_UP
+	
+    //DOWN
+	m=x+1;n=y;step=0;
+	while(m<N && (board[m][n]==nt)){ 
+		m++;
+		step++;
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x+1;n=y;
+			while(m<N && (board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m++;
+			}
+		}
+	}//END_DOWN
+	
+	//LEFT
+	m=x;n=y-1;step=0;
+	while(n>=0 &&(board[m][n]==nt)){
+		n--;
+		step++;
+	}
+	
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x;n=y-1;
+			while(n>=0 &&(board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				n--;
+			}
+		}
+	}//END_LEFT
+	
+	//RIGHT --NOT TESTED
+	m=x; n=y+1;step=0;
+	while(n<N &&(board[m][n]==nt)){
+		n++;
+		step++;
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x; n=y+1;
+			while(n<N &&(board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				n++;
+			}
+		}
+	}//END_RIGHT
+	
+	//UPLEFT
+	m=x-1;n=y-1;step=0;
+	while(m>=0 && n>=0 &&(board[m][n]==nt)){
+		n--;
+		m--;
+		step++;
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x-1;n=y-1;
+			while(m>=0 && n>=0 &&(board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m--;
+				n--;
+			}
+		}
+	}//END_UPLEFT
+	
+	
+	//UPRIGHT 
+	m=x-1;n=y+1;step=0;
+	while(m>=0 && n<N &&(board[m][n]==nt)){
+		m--;
+	 	n++;
+		step++;
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x-1;n=y+1;
+			while(m>=0 && n<N &&(board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m--;
+				n++;
+			}
+		}
+	}//END_UPRIGHT
+	
+	//DOWNLEFT
+	m=x+1;n=y-1;step=0;
+	while(m<N && n>=0 && (board[m][n]==nt)){
+		m++;
+		n--;
+		step++;	
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x+1;n=y-1;
+			while(m<N && n>=0 && (board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m++;
+				n--;
+			}
+		}
+	}//END_DOWNLEFT
+	
+	//DOWNRIGHT 
+	m=x+1;n=y+1;step=0;
+	while(m<N && n<N && (board[m][n]==nt)){
+		m++;
+		n++;
+		step++;
+	}
+	if(step){
+		if(board[m][n]==t){
+			if(mode==FLIPONLY)board[x][y]=t;
+			m=x+1;n=y+1;
+			while(m<N && n<N && (board[m][n]==nt)){
+				if(mode==FLIPONLY)board[m][n]=t;
+				flips++;
+				m++;
+				n++;
+			}
+		}
+	}//END_DOWNRIGHT
+	//printf("flips is %d\n",flips);
+	return flips;
+}
+ 
+                  
 char getTokenName(int t){
 	switch(t){
 		case X: return 'X';
@@ -62,8 +207,6 @@ char getTokenName(int t){
 		default: return '.';
 	}
 }
-
-
 
 void print(){
 printf("0 1 2 3 4 5 6 7 \n");
@@ -75,7 +218,9 @@ for(int i = 0; i<N ; i++){
 		}
 		printf("%d \n", i);
 	}
+	printf("\n\n");
 }	
+
 
 void clear(){
 //printf("0 1 2 3 4 5 6 7 \n");
@@ -145,7 +290,7 @@ int moveExist (int t){//t indicates wethher this is a X or a O
 				m=i-1;
 				n=j-1;
 				step=1;
-				while(m>=0){
+				while(m>=0 && n>=0){
 					if(meCrawler(t,step,m,n)) break;
 					step++;
 					m--;
@@ -186,127 +331,14 @@ int moveExist (int t){//t indicates wethher this is a X or a O
 				}//end diretion upright;
 				
 			}//End of Eight Direction
-			
 		}
-		printf("\n");
+		//printf("\n");
 	}
 } 
 
 
-int fCrawler(int step, int t, int nt, int m, int n){
-    if( (step==1) && ((getTokenName(board[m][n]) == '.')||( getTokenName(board[m][n])  == 'M'))) return 1;
-   	if(board[m][n]==t) return 1; //if next is same as X, then break
-   	if(board[m][n]==nt) {board[m][n]=t; flips++;}
-   	if( (step>1) && (board[m][n]==t)) return 1;
-   	return 0;
-}
 
-int flip(int t, int nt,int xloc, int yloc){ //t indicates X or O; nt is the opposite sign of X or O
-	//the token at xloc yloc must be M. O
-	if(board[xloc][yloc]!=M) return 1; //return 1 when the current location is not a maybe. 
-	board[xloc][yloc]=t;
+
 	
-	//explore eight direction 
-	    int m,n,step;
-		
-		//direction up
-		m=xloc-1;
-		n=yloc;
-		step=1;
-		while(m>=0){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++; m--;
-		}//end diretion up;
 
-		//direction down
-		m=xloc+1;
-		n=yloc;
-		step=1;
-		while(m<N){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			m++;
-		}//end diretion down;
-
-               
-		//direction left
-		m=xloc;
-		n=yloc-1;
-		step=1;
-		while(n>=0){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n--;
-		}//end diretion left;
-
-		//direction right
-		m=xloc;
-		n=yloc+1;
-		step=1;
-		while(n<N){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n++;
-		}//end diretion right;		
-	
-	   //direction downright
-		m=xloc+1;
-		n=yloc+1;
-		step=1;
-		while(n<N && m<N){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n++;
-			m++;
-		}//end diretion downright;	
-		
-		//direction downleft
-		m=xloc+1;
-		n=yloc-1;
-		step=1;
-		while(m<N && n>=0){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n--;
-			m++;
-		}//end diretion downleft;	
-		
-		//direction upright
-		m=xloc-1;
-		n=yloc+1;
-		step=1;
-		while(n<N && m>=0){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n--;
-			m++;
-		}//end diretion upright;
-		
-	    //direction upright
-		m=xloc-1;
-		n=yloc-1;
-		step=1;
-		while(n>=0 && m>=0){
-			if(fCrawler(step, t, nt, m, n)) break;
-			step++;
-			n--;
-			m--;
-		}//end diretion upright;
-	
-	printf("flips is %d\n", flips);
-	clear();
-    return 0;
-}
-
-
-void main(){
-	print();
-	moveExist(1);
-	print();
-	if(flip(1,2,2,4)){printf("Please flip a M !!!\n"); return; }
-	print();
-	moveExist(2);
-	print();
-    //printf("%c",getTokenName( board[0][0] ) );
-}
 
