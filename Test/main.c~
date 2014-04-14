@@ -1,35 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "main.h"
+#include <time.h>
 #define N 8
-
 
 typedef enum  {X=1, O=2, M=3} token;
 typedef enum  {COUNTONLY,FLIPONLY} mode;
 int board [N][N]={ {0,0,0,0,0,0,0,0},   
-                   {0,O,0,0,X,0,0,0},    
-                   {X,O,O,0,X,0,0,0},   
-                   {X,O,X,O,X,0,0,0},   
-                   {X,O,O,X,X,0,0,0},   
-                   {O,O,0,0,0,0,0,0},    
+                   {0,0,0,0,0,0,0,0},  
+                   {0,0,0,X,0,X,0,0},  
+                   {0,0,0,O,O,0,0,0},   
+                   {0,0,0,0,O,0,0,0},   
+                   {0,0,0,0,X,0,0,0},    
                    {0,0,0,0,0,0,0,0},   
                    {0,0,0,0,0,0,0,0} };
                    
 int computeCount[N][N] = {0};                   
 int flips;
 
+
+
 void main(){
 	print();
 	moveExist(X);
 	print();
-	flip(X,O,6,0,FLIPONLY);
-	clear();
+	computerMove(X,O);
+	//flip(X,O,6,0,FLIPONLY);
+	//clear();
 	print();
 }
 
 //---------------------------
 
-int flip(int t,int nt, int x, int y, int mode){
+int randGen( int min,  int max){/*randge is [min,max]. problem with random, the sequence is determinstic... */
+	//srand(time)NULL))
+	double scaled = (double)rand()/RAND_MAX;
+    return (max - min +1)*scaled + min;
+}
+
+void computerMoveHelper(int t, int nt, int *max, int *count){ //returns max counts 
+	int maxy=0;
+	int county=0;
+	for(int i=0; i<N ;i++){
+		for(int j=0; j<N; j++){
+			if(board[i][j]==M){
+				county++;
+				computeCount[i][j]=flip(t,nt,i,j,COUNTONLY);
+				if(computeCount[i][j]>maxy) maxy =computeCount[i][j];
+			}//end if board
+		}//enf for int j
+	}//end for i	
+	*max=maxy;
+	*count=county;
+}
+
+void computerMove(int t, int nt){
+	
+	int max=0,count=0;
+	computerMoveHelper(t,nt,&max,&count);
+    int number = randGen(1,count);
+    int tog=1;
+    while(tog && number >=1){
+		for(int i=0; i<N; i++){
+			for(int j=0; j<N; j++){
+				if(computeCount[i][j]==max){
+					//printf("number is %d\n",number);
+					if(number==1){
+					    //printf("here\n");
+						flip(t,nt,i,j, FLIPONLY);
+						tog=0;
+						number=0;
+						i=N;
+						j=N;
+					}
+					number--;
+				}//if
+			}//for j
+ 	    }//for i
+	  
+	}//end while
+	clear();
+}//computerMove
+
+
+
+int flip(int t,int nt, int x, int y, int mode){ //RETURNS THE NUMBER OF FLIPS
 	flips=0;
 	if(board[x][y]!=M) {
 		printf("Input coordinates for M is not valid!\n");
@@ -335,10 +390,3 @@ int moveExist (int t){//t indicates wethher this is a X or a O
 		//printf("\n");
 	}
 } 
-
-
-
-
-	
-
-
