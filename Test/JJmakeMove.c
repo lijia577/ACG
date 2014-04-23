@@ -21,15 +21,17 @@ int flips;
 void main(){
 	print();
 	
-	for(int i=0; i<20; i++){
+	for(int i=0; i<1; i++){
 	moveExist(X);
 	print();
+	clear();
 	computerMove(X,O);
-	
+	print();
 	moveExist(O);
 	print();
 	computerMove(O,X);
 	print();
+	//clear();
 	}
 
 	//flipIt(X,O,6,0,FLIPONLY);
@@ -89,7 +91,7 @@ void computerMove(int t, int nt){
 	  
 	}//end while
 	
-	clear();
+	//clear();
 }//computerMove
 
 
@@ -281,7 +283,7 @@ for(int i = 0; i<N ; i++){
 		printf("%c ",getTokenName( board[i][j] ) );
 		}
 		for( int j =0; j<N; j++){
-		printf("%d ", computeCount[i][j]);
+		printf("%c ", computeCount[i][j]==0?'.':(char)computeCount[i][j]);
 		}
 		
 		printf("  %d \n", i);

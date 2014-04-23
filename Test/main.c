@@ -1,11 +1,46 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "main.h"
+#include "init.h"
+#include "io.h"
+#include "makeMove.h"
 
+int main(){
 
+	srand(time(NULL));
 
-void main(){
-	char c[2][2][2]={'a','s','s','h','o','l','e','d'};
-	printf("%s",**c);
+	printf("\n\nWelcome to Othello!\n\n");
+	
+
+	initialize();
+	
+	int turn=1;
+	
+	//moveExist(X);
+	while(countMs()){
+	//clear();
+		if(turn){		
+		
+			puts("X is playing!");
+			
+			moveExist(X);
+			print();
+			getEntry();
+			flipIt(X,O,row,col,FLIPONLY);
+			turn=!turn;
+		}else{
+		
+			puts("O is playing!");
+			moveExist(O);
+			print();
+			getEntry();
+			flipIt(O,X,row,col,FLIPONLY);
+			
+			turn=!turn;
+		}
+		scoreKeep();
+		print();
+	
+	}
+	
+
+	return 0;
 }
-

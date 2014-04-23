@@ -1,45 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "JJmakeMove.h"
+#include "makeMove.h"
+#include "main.h"
 #include <time.h>
 #define N 8
 
-typedef enum  {X=1, O=2, M=3} token;
-typedef enum  {COUNTONLY,FLIPONLY} mode;
-int board [N][N]={ {0,0,0,0,0,0,0,0},   
-                   {0,0,0,0,0,0,0,0},  
-                   {0,0,0,X,0,X,0,0},  
-                   {0,0,0,O,O,0,0,0},   
-                   {0,0,0,0,O,0,0,0},   
-                   {0,0,0,0,X,0,0,0},    
-                   {0,0,0,0,0,0,0,0},   
-                   {0,0,0,0,0,0,0,0}};
-                   
-int computeCount[N][N] = {0};                   
-int flips;
 
-void main(){
-	print();
-	
-	for(int i=0; i<1; i++){
-	moveExist(X);
-	print();
-	clear();
-	computerMove(X,O);
-	print();
-	moveExist(O);
-	print();
-	computerMove(O,X);
-	print();
-	//clear();
-	}
-
-	//flipIt(X,O,6,0,FLIPONLY);
-	//clear();
-	
-}
-
-//---------------------------
 
 int randGen( int min,  int max){/*randge is [min,max]. problem with random, the sequence is determinstic... */
 	//srand(time)NULL))
@@ -91,7 +57,7 @@ void computerMove(int t, int nt){
 	  
 	}//end while
 	
-	//clear();
+	clear();
 }//computerMove
 
 
@@ -274,22 +240,6 @@ char getTokenName(int t){
 		default: return '.';
 	}
 }
-
-void print(){
-printf("0 1 2 3 4 5 6 7 \n");
-for(int i = 0; i<N ; i++){
-
-		for( int j =0; j<N; j++){
-		printf("%c ",getTokenName( board[i][j] ) );
-		}
-		for( int j =0; j<N; j++){
-		printf("%d ", computeCount[i][j]);
-		}
-		
-		printf("  %d \n", i);
-	}
-	printf("\n\n");
-}	
 
 
 void clear(){
