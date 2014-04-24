@@ -1,0 +1,8 @@
+p1: main.o printadd.o add.o
+	cc main.o printadd.o add.o-o p1
+main.o: main.h
+	cc -c main.c
+printadd.o: printadd.h
+	cc -c printadd.c
+add.o: add.h
+	cc -c add.c
