@@ -1,0 +1,45 @@
+This is the overall design idea for this project.
+
+Read functions line by line. Using fgets() for line by line. 
+
+def update:
+	update the total number of babies in the totalStruct for that node.
+	create a new yearStruct and append at the end of the linkedList. 
+
+def createNew:
+	create new totalStruct and a new year Struct. All the stuff in the 
+		totalStruct and yearStruct should be almost the same. 
+	count the uniNameNum. 
+	Insert the this new node into nameList, where all the names are inserted 
+        	in alphabetical order. 
+	Insert the new node also into a rankList, just append it there. 
+	
+def process:
+	group update and createNew togother; 	
+	if(nameExist) update;
+	else:
+		createNew;
+
+For each line:
+	if(male):
+		process;
+		(do the male side)
+	else:
+		process;
+
+#When the above is done. You will have two lists: nameList and the rankList.
+#the nameList is already sorted. The Rank list is not. Because the rank will 
+#not be complete until all the lines are loaded. 
+
+
+//FOR BOTH GENDER:
+
+qsort(rankList, uniNameNum, compRankFunc);
+
+#when both lists are sorted, convert then into bst. 
+convertIntoBST(rankList);
+convertIntoBST(nameList);
+
+//END BOTH GENDER
+
+
