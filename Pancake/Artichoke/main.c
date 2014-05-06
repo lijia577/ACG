@@ -2,35 +2,10 @@
 #include<string.h>
 #include<stdlib.h>
 #define NAME_LEN 20
-
-struct totalRank {
-	//Hold the total rank for each baby, used once for a baby,links to the year rank
-	int trank; //total rank
-	char name[NAME_LEN+1];
-	int totalcount; //total count
-	struct yearRank *yearPointer;
-};
-typedef struct totalRank DNode;
-
-
-struct yearRank {
-	//Structure to hold the year rank for each individual
-	int year;
-	int rank;
-	int count;
-	struct yearRank *next;
-};
-typedef struct yearRank YearNode;
-
-
-struct fRankList{ 
-	//female Rank List
-	struct DNode *next;
-};
-typedef struct fRankList fRankNode;
+#include"dnode.c"
 
 int main(){
-	int year=2010;
+	int year=2011;
 	FILE *fp;
 	char str[30];
 	
@@ -45,9 +20,16 @@ int main(){
 		
 		while((fgets(str,sizeof(str), fp))!=NULL){
 			sscanf(str,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
-			printf("%d %s %d %s %d \n", localrank,  (char *)&boyname, boynum , (char *)&girlname, girlnum);
+			//printf("%d %s %d %s %d \n", localrank,  (char *)&boyname, boynum , (char *)&girlname, girlnum);
 			
+			YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
+			DNode *newList = DNodeConstructor(aNode, boynum ,(char *) &boyname);
+			insertInOrderBNL(constructorBNL(newList)); 
 			
+			printBNL();	
+			
+			//printf("newList trank: %d, name:%s,totalcount:%d, and that: %d \n", 
+			//		newList->trank, newList->name, newList->totalcount, newList->yearPointer->year);
 		}//end while fgets	
 		
 		

@@ -1,3 +1,10 @@
+Error log:
+
+I want the BNL (boy name list) to insert in order. Meaning when inserting, all the stuff should already be in the right order.
+however, insertInOrderBNL function is not working properly now. 
+
+
+````````````````````````````````````````````````````````````````````````````````````
 This is the overall design idea for this project.
 
 Read functions line by line. Using fgets() for line by line. 
