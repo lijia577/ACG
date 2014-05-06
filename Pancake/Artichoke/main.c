@@ -26,11 +26,11 @@ int main(){
 			//Construct BNLlist 
 			YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
 			DNode *newList = DNodeConstructor(aNode, boynum ,(char *) &boyname);
-			insertInOrderBNL(&bnlhead,constructorBNL(newList)); 
+			insertInOrderBNL(&bnlhead,constructorBNL(newList),aNode); 
 			//end construct BNLlist
 			
-			//printf("newList trank: %d, name:%s,totalcount:%d, and that: %d \n", 
-			//		newList->trank, newList->name, newList->totalcount, newList->yearPointer->year);
+			printf("*****newList trank: %d, name:%s,totalcount:%d, and that: %d ************\n", 
+					newList->trank, newList->name, newList->totalcount, newList->yearPointer->year,1);
 		}//end while fgets	
 		
 			
@@ -42,8 +42,9 @@ int main(){
 	}
 	
 	printBNL();
-	BNLtoBRLconverter();
+	
 	puts("=========");
+	BNLtoBRLconverter();
 	printBRL();
 	
 	
@@ -55,11 +56,19 @@ int main(){
 	//this is BST search
 	char s[20]="Brad";
 	DNode *res=BSTsearch(&root,s);
-	
-	//if(res!=NULL) puts("sd");
-	printf("Res for %s: Name: %s, total Rank is: %d , total count is: %d\n NEXT year: %d,  rank: %d, count:%d \n",str, res->name, res->trank, res->totalcount , res->yearPointer->year, res->yearPointer->rank, res->yearPointer->count);
+
+	printf("\n\nRes for %s: Name: %s, total Rank is: %d , total count is: %d\n ",s, res->name, res->trank, res->totalcount);
 	//end of BST search 
 
+    YearNode *node=res->yearPointer;
+    
+	
+	//while(1){
+	    printf("	Year is: %d, rank is :%d, count is: %d\n", node->year, node->rank, node->count);
+	    if(node->next == NULL) puts("XX");
+		//node=node->next;
+		//if(node==NULL) break;	
+	//}
 	
 
 

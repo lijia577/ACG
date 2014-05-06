@@ -109,7 +109,7 @@ void appendBRL(BRL *p){
 }
 
 //the strcmp is not working. The program think that tutu Tutu and Tom and Sida are the same. 
-void insertInOrderBNL(BNL **bnlhead, BNL *new_node){
+void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
 	BNL *current;
 	//special head case
 	if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
@@ -126,6 +126,12 @@ void insertInOrderBNL(BNL **bnlhead, BNL *new_node){
             if(strcmp( current->next->data->name,  new_node->data->name)==0 ){
         		//puts("same & update");
         		(current->next->data->totalcount)+=(new_node->data->totalcount);
+        		//update append the anode
+        		DNode *d=current->next->data;
+        		while(d->yearPointer->next!=NULL){
+        			d->yearPointer=d->yearPointer->next;
+        		}
+        		d->yearPointer->next=aNode;
         		return;
        		}
        		//puts("sd");
@@ -147,20 +153,19 @@ void printBNL(){
 	}
 }
 
-//BUG!!! BUG!!! 
+
+
 void insertInOrderBRL(BRL **brlhead, BRL *new_node){
-BNL *current;
-	//special head case
+	BRL *current;
 	if (*brlhead == NULL || ((*brlhead)->data->totalcount <new_node->data->totalcount) ){
         new_node->next = *brlhead;
         *brlhead = new_node;
-        puts("sdf");
     }else{
-        /* Locate the node before the point of insertion */
+        
         current = *brlhead;
         while (current->next!=NULL && ((current->next->data->totalcount >new_node->data->totalcount)) ){
             current = current->next; 
-            
+        	    
         }
         
         new_node->next = current->next;
@@ -183,10 +188,6 @@ void printBRL(){
 void BNLtoBRLconverter(){
 	BNL *handle= bnlhead;
 	int count=1;
-	//case head 
-	if(brlhead==NULL){
-		appendBRL(constructorBRL(handle->data));
-	}
 	
 	while(handle!=NULL){
 		insertInOrderBRL(&brlhead,constructorBRL(handle->data));
