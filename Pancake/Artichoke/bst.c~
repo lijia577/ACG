@@ -17,7 +17,7 @@ struct TNode
 
 typedef struct TNode Tree;
  
-Tree* newNode(int data);
+Tree* constructorTree(int data);
 
 int countLNodes(struct LNode *head);
 Tree* sortedListToBSTRecur(struct LNode **head_ref, int n);
@@ -48,7 +48,7 @@ Tree* sortedListToBSTRecur(struct LNode **head_ref, int n)
  
     /* Allocate memory for root, and link the above constructed left
        subtree with root */
-    Tree *root = newNode((*head_ref)->data);
+    Tree *root = constructorTree((*head_ref)->data);
     root->left = left;
  
     /* Change head pointer of Linked List for parent recursive calls */
@@ -107,7 +107,7 @@ void printList(struct LNode *node)
  
 /* Helper function that allocates a new node with the
    given data and NULL left and right pointers. */
-Tree* newNode(int data)
+Tree* constructorTree(int data)
 {
     Tree* node = (Tree*)
                          malloc(sizeof(Tree));

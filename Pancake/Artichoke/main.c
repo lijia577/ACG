@@ -49,12 +49,17 @@ int main(){
 	
 	BNT *root = sortedListToBST(bnlhead);
 	inOrdTreeTrans(root);
-	puts("");
+	puts("--------------");
 	
 	
+	//this is BST search
+	char s[20]="Brad";
+	DNode *res=BSTsearch(&root,s);
 	
-	
-	//now you have two linkedlist BRL and BNL 
+	//if(res!=NULL) puts("sd");
+	printf("Res for %s: Name: %s, total Rank is: %d , total count is: %d\n NEXT year: %d,  rank: %d, count:%d \n",str, res->name, res->trank, res->totalcount , res->yearPointer->year, res->yearPointer->rank, res->yearPointer->count);
+	//end of BST search 
+
 	
 
 

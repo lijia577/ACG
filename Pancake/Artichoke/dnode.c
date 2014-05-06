@@ -154,12 +154,15 @@ BNL *current;
 	if (*brlhead == NULL || ((*brlhead)->data->totalcount <new_node->data->totalcount) ){
         new_node->next = *brlhead;
         *brlhead = new_node;
+        puts("sdf");
     }else{
         /* Locate the node before the point of insertion */
         current = *brlhead;
         while (current->next!=NULL && ((current->next->data->totalcount >new_node->data->totalcount)) ){
             current = current->next; 
+            
         }
+        
         new_node->next = current->next;
         current->next = new_node;
     }
@@ -167,8 +170,11 @@ BNL *current;
 
 void printBRL(){
 	BRL *handle=brlhead;
+	int count=1;
 	while(handle!=NULL){
 		printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
+		handle->data->trank=count;
+		count++;
 		handle=handle->next;
 	}
 }
@@ -176,6 +182,7 @@ void printBRL(){
 //construct BRL
 void BNLtoBRLconverter(){
 	BNL *handle= bnlhead;
+	int count=1;
 	//case head 
 	if(brlhead==NULL){
 		appendBRL(constructorBRL(handle->data));
@@ -184,6 +191,7 @@ void BNLtoBRLconverter(){
 	while(handle!=NULL){
 		insertInOrderBRL(&brlhead,constructorBRL(handle->data));
 		handle=handle->next;
+		count++;
 	}
 	
 }
@@ -260,6 +268,17 @@ BNT* sortedListToBST(BNL *bnlhead){
     
     int n = countLNodes(bnlhead);
     return sortedListToBSTRecur(&bnlhead, n);
+}
+
+DNode* BSTsearch(BNT ** root, char *str){
+	if(!(*root)) return NULL;
+	if(strcmp(str,(*root)->data->data->name)<0 ) {
+		BSTsearch(&((*root)->left), str);
+	}else if(strcmp(str,(*root)->data->data->name)>0 ) {
+		BSTsearch(&((*root)->left), str);
+	}else{
+		return (*root)->data->data;
+	}
 }
 
 
