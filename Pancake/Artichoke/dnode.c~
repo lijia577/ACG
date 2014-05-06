@@ -42,6 +42,35 @@ typedef struct tagA BRL;
 BRL *brlhead = NULL;
 BRL *brltail= NULL;
 
+struct TNode{
+    BNL *data;
+    struct TNode* left;
+    struct TNode* right;
+};
+typedef struct TNode BNT;
+
+
+//----------------------------------------
+
+BNT* constructorTree(BNL *data){
+    BNT* node;
+  	if( ( node = (BNT*) malloc(sizeof(BNT)) )!=NULL){
+    	node->data = data;
+    	node->left = NULL;
+   		node->right = NULL;
+ 	}else{
+ 		printf("Mem loc error\n");
+ 		exit(0);
+ 	}
+    return node;
+}
+
+void inOrdTreeTrans(BNT* node){
+    if (node == NULL) return;
+    inOrdTreeTrans(node->left);
+    printf("%s ", node->data->data->name);
+    inOrdTreeTrans(node->right);
+}
 
 
 BNL* constructorBNL (DNode *data){
@@ -122,23 +151,13 @@ void printBNL(){
 void insertInOrderBRL(BRL **brlhead, BRL *new_node){
 BNL *current;
 	//special head case
-	if (*brlhead == NULL || ((*brlhead)->data->totalcount < new_node->data->totalcount) ){
+	if (*brlhead == NULL || ((*brlhead)->data->totalcount <new_node->data->totalcount) ){
         new_node->next = *brlhead;
         *brlhead = new_node;
-    }else if(  ( (*brlhead)->data->totalcount== new_node->data->totalcount)   ){
-    	//puts("same");
-    	//((*bnlhead)->data->totalcount)+=(new_node->data->totalcount);
-    	return;
     }else{
         /* Locate the node before the point of insertion */
         current = *brlhead;
-        while (current->next!=NULL &&  ((current->next->data->totalcount >= new_node->data->totalcount)) ){
-            if(( current->next->data->totalcount==new_node->data->totalcount)){
-        		//puts("same & update");
-        		//(current->next->data->totalcount)+=(new_node->data->totalcount);
-        		return;
-       		}
-       		//puts("sd");
+        while (current->next!=NULL && ((current->next->data->totalcount >new_node->data->totalcount)) ){
             current = current->next; 
         }
         new_node->next = current->next;
@@ -155,7 +174,7 @@ void printBRL(){
 }
 
 //construct BRL
-void whatever(){
+void BNLtoBRLconverter(){
 	BNL *handle= bnlhead;
 	//case head 
 	if(brlhead==NULL){
@@ -200,6 +219,47 @@ YearNode* YearNodeConstructor(int year, int localrank, int boynum){
 }
 
 
+int countLNodes(BNL *bnlhead){
+    int count = 0;
+    BNL *temp = bnlhead;
+    while(temp)
+    {
+        temp = temp->next;
+        count++;
+    }
+    return count;
+}
 
+
+BNT* sortedListToBSTRecur(BNL **head_ref, int n){
+    /* Base Case */
+    if (n <= 0)
+        return NULL;
+ 
+    /* Recursively construct the left subtree */
+    BNT *left = sortedListToBSTRecur(head_ref, n/2);
+ 
+    /* Allocate memory for root, and link the above constructed left
+       subtree with root */
+    BNT *root = constructorTree((*head_ref));
+    root->left = left;
+ 
+    /* Change head pointer of Linked List for parent recursive calls */
+    *head_ref = (*head_ref)->next;
+ 
+    /* Recursively construct the right subtree and link it with root
+      The number of nodes in right subtree  is total nodes - nodes in
+      left subtree - 1 (for root) which is n-n/2-1*/
+    root->right = sortedListToBSTRecur(head_ref, n-n/2-1);
+ 
+    return root;
+}
+ 
+ 
+BNT* sortedListToBST(BNL *bnlhead){
+    
+    int n = countLNodes(bnlhead);
+    return sortedListToBSTRecur(&bnlhead, n);
+}
 
 

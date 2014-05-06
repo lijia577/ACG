@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #define NAME_LEN 20
 #include"dnode.c"
+//#include"bst.c"
 
 int main(){
 	int year=2010;
@@ -41,12 +42,22 @@ int main(){
 	}
 	
 	printBNL();
-	
 	BNLtoBRLconverter();
 	puts("=========");
 	printBRL();
 	
+	
+	BNT *root = sortedListToBST(bnlhead);
+	inOrdTreeTrans(root);
+	puts("");
+	
+	TreeSearch(root,"Warren");
+	
+	
 	//now you have two linkedlist BRL and BNL 
+	
+
+
 
 	return 0;
 }
