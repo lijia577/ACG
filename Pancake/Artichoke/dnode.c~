@@ -155,7 +155,7 @@ void printBRL(){
 }
 
 //construct BRL
-void BNLtoBRLconverter(){
+void whatever(){
 	BNL *handle= bnlhead;
 	//case head 
 	if(brlhead==NULL){

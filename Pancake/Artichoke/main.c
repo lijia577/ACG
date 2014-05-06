@@ -5,7 +5,7 @@
 #include"dnode.c"
 
 int main(){
-	int year=2011;
+	int year=2010;
 	FILE *fp;
 	char str[30];
 	
@@ -22,17 +22,17 @@ int main(){
 			sscanf(str,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
 			//printf("%d %s %d %s %d \n", localrank,  (char *)&boyname, boynum , (char *)&girlname, girlnum);
 			
+			//Construct BNLlist 
 			YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
 			DNode *newList = DNodeConstructor(aNode, boynum ,(char *) &boyname);
-			insertInOrderBNL(constructorBNL(newList)); 
-			
-			printBNL();	
+			insertInOrderBNL(&bnlhead,constructorBNL(newList)); 
+			//end construct BNLlist
 			
 			//printf("newList trank: %d, name:%s,totalcount:%d, and that: %d \n", 
 			//		newList->trank, newList->name, newList->totalcount, newList->yearPointer->year);
 		}//end while fgets	
 		
-		
+			
 		//switch to another file.
 		year++;
 		fclose(fp);
@@ -40,9 +40,25 @@ int main(){
 		//end of swith to antoher file
 	}
 	
-
+	printBNL();
 	
+	BNLtoBRLconverter();
+	puts("=========");
+	printBRL();
+	
+	//now you have two linkedlist BRL and BNL 
 
-
-return 0;
+	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+

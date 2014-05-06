@@ -50,6 +50,56 @@ void append(llNode *p){
 	}
 }
 
+void sortedInsert(llNode** head_ref, llNode* new_node){
+    llNode *current;
+    /* Special case for the head end */
+    if (*head_ref == NULL || (*head_ref)->data > new_node->data){
+        new_node->next = *head_ref;
+        *head_ref = new_node;
+    }else if((*head_ref)->data == new_node->data){
+    	puts("same");
+    	//(*head_ref)->data
+    	return;
+    }else{
+        /* Locate the node before the point of insertion */
+        current = *head_ref;
+        while (current->next!=NULL &&current->next->data < new_node->data){
+            current = current->next;
+        }
+        if(current->next->data == new_node->data){
+        	puts("smae");
+        	return;
+        }
+        new_node->next = current->next;
+        current->next = new_node;
+    }
+}
+
+
+llNode* insertInOrder(llNode *p){
+	llNode *handle=head;
+	while((handle->next)!=NULL){
+	
+	if(handle==head && ((p->data)<(handle->data))){
+		puts("this case you insert before head");
+		p->next=head;
+		p=head;
+		return p;
+	}else if( ( (p->data)<(handle->next->data) ) && ((p->data)>(handle->data)) ){
+		puts("P is in btw handle and handle.next");
+		p->next=handle->next;
+		handle->next=p;
+		return head;
+	}else if((handle->data) == (p->data)){
+		puts("there is a duplicated, update");
+		(handle->data)+=1;
+		return head; 
+	}
+		handle=handle->next;
+		
+	}//end while
+}
+
 void printlist(){
 	llNode *handle=head;
 	while(handle!=NULL){
@@ -90,8 +140,7 @@ void insertafter(llNode *p1, llNode *p2){
 	}
 }
 
-//insert p1 before p2
-void insertbefore(
+
 
 llNode *search (int x){
 	llNode *handle;
@@ -140,10 +189,15 @@ void main(){
 	//llNode *node4= constructor(4);
 	//llNode *node5= constructor(5);
 	append(constructor(1));
-	append(constructor(2));
 	append(constructor(3));
-	append(constructor(4));
+	append(constructor(5));
+	append(constructor(7));
 	
+	//printlist();
+	//head=insertInOrder(constructor(0));
+	sortedInsert(&head, constructor(1));
+	sortedInsert(&head, constructor(6));
+	sortedInsert(&head, constructor(7));
 	printlist();
 	//search(1);
 	//insertbefore(&head,10);
