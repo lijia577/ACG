@@ -7,9 +7,9 @@
 
 
 int main(){
-	int year=2010;
+	int year=1900;
 	FILE *fp;
-	char str[30];
+	char str[30],line[60];
 	
 	char boyname[30];
 	char girlname[30];
@@ -19,53 +19,78 @@ int main(){
 	
 	int pCount=0;
 	
-	sprintf(str,"testfile/%d",year);
-	
-	
-	puts("****************");
-	while((fp = fopen(str,"r"))!=NULL){
+
+	while(year<2015){
+		boynum=0;
+		girlnum=0;
+		localrank=0;
 		
-		while((fgets(str,sizeof(str), fp))!=NULL){
-			sscanf(str,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
-			
-			if(str[0]!=' ' && strlen(str)>5){//this line detects empty line
-				//printf("\n   year is %d \n", year);
+		sprintf(str,"babynames/names%d",year); //babynames/names
+		fp = fopen(str,"r");
+		
+		if(fp==NULL) year++;
+		
+		else{
+			while(fgets(line,60,fp)!=0){
+				sscanf(line,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
+				pCount++;
 				sortedInsertBNL( &bnlhead,  year,   localrank,  boynum,  boyname);
-			}
-			
-		}//end while fgets	
+				sortedInsertBNL( &gnlhead,  year,   localrank,  girlnum, girlname);
+			}//end while
+			year++;
+			fclose(fp);
+		}//end of else
+	}//enf of while year	
 		
-			
-		//switch to another file.
-		year++;
-		fclose(fp);
-		sprintf(str,"testfile/%d",year);
-		//end of swith to antoher file
-	}
+	printf("pCount is %d",pCount);
+	puts("Name should be in alpaphetical order");
+	//printBNL(bnlhead);
+	puts("");
+	//printBNL(gnlhead);
+	puts("----------------------");
 	
-	printBNL(bnlhead);
-	puts("=============================");
-	
-	BNLtoBRLconverter(bnlhead, brlhead);
+	puts("Rank should be in order");
+	BNLtoBRLconverter(bnlhead, &brlhead);
+	BNLtoBRLconverter(gnlhead, &grlhead);
 	rankBRL(brlhead);
+	rankBRL(grlhead);
 	
-	
+	puts("------------------");
 	BNT *bRoot = sortedListToBST(bnlhead);
-	inOrdTreeTrans(bRoot);
-	puts("--------------");
+	BNT *gRoot = sortedListToBST(gnlhead);
+	//printf("\nIn order transversal of tree: ");
+	//inOrdTreeTrans(bRoot);
+	//puts("");
+	
+	//printf("\nIn order transversal of tree: ");
+	//inOrdTreeTrans(gRoot);
+	//puts("");
 	
 	
 	//this is BST search
-	char s[20]="Brad";
+	puts("\nHere comes the BT search");
+	char s[20]="Willy";
 	DNode *res=BSTsearch(&bRoot,s);
-	print(res);
+	if(res==NULL) printf("%s does not exist in any file.\n", s);
+	else print(res);
+	puts("*");
+	char g[20]="Eden";
+	DNode *gre=BSTsearch(&gRoot,g);
+	if(gre==NULL) printf("%s does not exist in any file.", g);
+	else print(gre);
+	
 	//end of BST search 
 
    //Search with rank
-    int searchForRank=2;
+  	 puts("\nHere comes the Rank search");
+    int searchForRank=1726;
+    puts("boy");
     searchRank(brlhead, searchForRank);
-
+    puts("girl");
+    searchRank(grlhead, searchForRank);
+	//printf("counting is %d\n", counting);
 	return 0;
+	fclose(fp);
 }
 
 void print(DNode *res){

@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include"dnode.h"
 
+static int counting=0;
 BNT* constructorTree(BNL *data){
     BNT* node;
   	if( ( node = (BNT*) malloc(sizeof(BNT)) )!=NULL){
@@ -106,20 +107,22 @@ void rankBRL(BRL *brlhead){
 	while(handle!=NULL){
 		printf("%s: total count is: %d ",handle->data->name,handle->data->totalcount);
 		if(prevCount!=handle->data->totalcount) rank++;
+		
 		handle->data->trank=rank;
 		prevCount=handle->data->totalcount;
 		handle=handle->next;
+		//rank++;
 		printf("rank is: %d\n",rank);
 	}
 }
 
 //construct BRL
-void BNLtoBRLconverter(BNL *bnlhead, BRL *brlhead){
+void BNLtoBRLconverter(BNL *bnlhead, BNL **brlhead){
 	BNL *handle= bnlhead;
 	int count=1;
 	
 	while(handle!=NULL){
-		insertInOrderBRL(&brlhead,constructorBRL(handle->data));
+		insertInOrderBRL(brlhead,constructorBRL(handle->data));
 		handle=handle->next;
 		count++;
 	}
@@ -220,6 +223,7 @@ void appendYearNode(YearNode **p, YearNode *aNode){
 }
 
 void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *boyname){
+
 	YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
 	BNL *temp=isInList(*bnlhead,boyname);
 	BNL *current;
@@ -227,20 +231,20 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 	if(temp!=NULL){//name is already on the list
 		(temp->data->totalcount) += (aNode->count);
 		appendYearNode(&(temp->data->yearPointer), aNode);
-		printf("Name is on list %s \n", temp->data->name);
+		//printf("Name is on list %s \n", temp->data->name);
 		
 	}else{//the name is new to the list
-		printf("Name is NOT on list %s \n", boyname);
-		
+		//printf("Name is NOT on list %s \n", boyname);
+		counting++;
 		DNode *anotherNode = DNodeConstructor(aNode, boynum ,boyname);
 		BNL *new_node=constructorBNL(anotherNode);
 		//case where insertion happens before head.
-		if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
+		if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>=0 ){
        		new_node->next = *bnlhead;
         	*bnlhead = new_node;
         }else{
         	current =*bnlhead;
-        	 while (current->next!=NULL && current->next->data < new_node->data){
+        	 while (current->next!=NULL && strcmp(current->next->data->name, new_node->data->name)<0){
             	current = current->next;
              }
         	 new_node->next = current->next;

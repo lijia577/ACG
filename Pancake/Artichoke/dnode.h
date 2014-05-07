@@ -62,7 +62,7 @@ BNL* isInList(BNL *bnlhead, char *name);
 void printBNL(BNL *bnlhead);
 void insertInOrderBRL(BRL **brlhead, BRL *new_node);
 void rankBRL(BRL *brlhead);
-void BNLtoBRLconverter(BNL *bnlhead);
+void BNLtoBRLconverter(BNL *bnlhead, BRL **brlhead);
 DNode* DNodeConstructor(YearNode *aNode, int boynum, char *boyname);
 YearNode* YearNodeConstructor(int year, int localrank, int boynum);
 int countLNodes(BNL *bnlhead);
