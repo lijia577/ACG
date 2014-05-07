@@ -108,7 +108,17 @@ void appendBRL(BRL *p){
 	}
 }
 
-//the strcmp is not working. The program think that tutu Tutu and Tom and Sida are the same. 
+BNL* isInList(BNL *bnlhead, char *name){
+	BNL *handle=bnlhead;
+	while(handle!=NULL){
+		if(strcmp(handle->data->name,name)==0) return handle;
+		handle=handle->next;
+	}
+	return NULL;
+}
+
+
+
 void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
 	BNL *current;
 	//special head case
@@ -126,12 +136,6 @@ void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
             if(strcmp( current->next->data->name,  new_node->data->name)==0 ){
         		//puts("same & update");
         		(current->next->data->totalcount)+=(new_node->data->totalcount);
-        		//update append the anode
-        		DNode *d=current->next->data;
-        		while(d->yearPointer->next!=NULL){
-        			d->yearPointer=d->yearPointer->next;
-        		}
-        		d->yearPointer->next=aNode;
         		return;
        		}
        		//puts("sd");
@@ -282,4 +286,38 @@ DNode* BSTsearch(BNT ** root, char *str){
 	}
 }
 
+void appendYearNode(YearNode **p, YearNode *aNode){
+	YearNode *handle = *p;
+	while(handle->next!=NULL){
+		handle=handle->next;
+	}
+	handle->next=aNode;
+}
+
+void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *boyname){
+	YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
+	BNL *temp=isInList(*bnlhead,boyname);
+	BNL *current;
+	
+	if(temp!=NULL){//name is already on the list
+		(temp->data->totalcount) += (aNode->count);
+		appendYearNode(&(temp->data->yearPointer), aNode);
+	}else{//the name is new to the list
+		DNode *anotherNode = DNodeConstructor(aNode, boynum ,boyname);
+		BNL *new_node=constructorBNL(anotherNode);
+		//case where insertion happens before head.
+		if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
+       		new_node->next = *bnlhead;
+        	*bnlhead = new_node;
+        }else{
+        	current =*bnlhead;
+        	 while (current->next!=NULL && current->next->data < new_node->data){
+            	current = current->next;
+             }
+        	 new_node->next = current->next;
+             current->next = new_node;
+        }  
+	}
+	
+}
 
