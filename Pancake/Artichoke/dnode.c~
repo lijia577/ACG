@@ -2,8 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include"dnode.h"
+#include"io.h"
 
-static int counting=0;
 BNT* constructorTree(BNL *data){
     BNT* node;
   	if( ( node = (BNT*) malloc(sizeof(BNT)) )!=NULL){
@@ -102,17 +102,23 @@ void insertInOrderBRL(BRL **brlhead, BRL *new_node){
 void rankBRL(BRL *brlhead){
 	BRL *handle=brlhead;
 	int rank=1;
+	int pRank=1;
+	int c=1;
 	int prevCount=brlhead->data->totalcount;
 	
 	while(handle!=NULL){
 		//printf("%s: total count is: %d ",handle->data->name,handle->data->totalcount);
-		if(prevCount!=handle->data->totalcount) rank++;
-		
-		handle->data->trank=rank;
+		if(prevCount==handle->data->totalcount){
+			handle->data->trank=pRank;
+		}else{
+			handle->data->trank=c;
+			rank++;
+		}
+		pRank=handle->data->trank;
+		c++;
 		prevCount=handle->data->totalcount;
 		handle=handle->next;
-		//rank++;
-		printf("rank is: %d\n",rank);
+		//printf("rank is: %d\n",rank);
 	}
 }
 
@@ -235,7 +241,7 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 		
 	}else{//the name is new to the list
 		//printf("Name is NOT on list %s \n", boyname);
-		counting++;
+		
 		DNode *anotherNode = DNodeConstructor(aNode, boynum ,boyname);
 		BNL *new_node=constructorBNL(anotherNode);
 		//case where insertion happens before head.
@@ -254,35 +260,19 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 	
 }
 
-/*
 
-void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
-	BNL *current;
-	//special head case
-	if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
-        new_node->next = *bnlhead;
-        *bnlhead = new_node;
-    }else if(  strcmp( (*bnlhead)->data->name, new_node->data->name)==0   ){
-    	//puts("same + update");
-    	((*bnlhead)->data->totalcount)+=(new_node->data->totalcount);
-    	return;
-    }else{
-        
-        current = *bnlhead;
-        while (current->next!=NULL &&  (strcmp(current->next->data->name, new_node->data->name)<=0) ){
-            if(strcmp( current->next->data->name,  new_node->data->name)==0 ){
-        		//puts("same & update");
-        		(current->next->data->totalcount)+=(new_node->data->totalcount);
-        		return;
-       		}
-       		//puts("sd");
-            current = current->next;
-            
-        }
-       
-        new_node->next = current->next;
-        current->next = new_node;
-    }
+int searchRank(BRL *brlhead, int num){
+int res=0;
+	BRL *handle=brlhead;
+	while(handle!=NULL && handle->data->trank<=num){
+		if(handle->data->trank ==num){
+			res=1;
+			//printf("%s : total rank(%d), total count(%d) \n",handle->data->name,handle->data->trank , handle->data->totalcount ); 
+			print(handle->data);
+		}
+		handle=handle->next;
+	}
+	return res;
 }
-*/
+
 

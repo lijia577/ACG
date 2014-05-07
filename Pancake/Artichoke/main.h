@@ -7,8 +7,5 @@
 #include <string.h>
 #include "dnode.h"
 
-void print(DNode *res);
-void searchRank(BRL *brlhead, int num);
-
 
 #endif

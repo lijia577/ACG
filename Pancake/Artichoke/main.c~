@@ -3,8 +3,7 @@
 #include<stdlib.h>
 #include"main.h"
 #include"dnode.h"
-#include"dnode.c"
-
+#include"io.h"
 
 int main(){
 
@@ -55,7 +54,7 @@ int main(){
 	rankBRL(brlhead);
 	rankBRL(grlhead);
 	
-	puts("------------------");
+	//puts("------------------");
 	BNT *bRoot = sortedListToBST(bnlhead);
 	BNT *gRoot = sortedListToBST(gnlhead);
 	//printf("\nIn order transversal of tree: ");
@@ -69,6 +68,8 @@ int main(){
 	
 	//this is BST search
 	//puts("\nHere comes the BT search");
+	
+	
 	char s[20]="Sd";
 	DNode *res=BSTsearch(&bRoot,s);
 	if(res==NULL) printf("%s does not exist in any file.\n", s);
@@ -82,39 +83,20 @@ int main(){
 	//end of BST search 
 
    //Search with rank
-  	puts("\nHere comes the Rank search");
-    int searchForRank=1;
-    puts("boy");
-    searchRank(brlhead, searchForRank);
-    puts("girl");
-    searchRank(grlhead, searchForRank);
+    
+  	puts("\nCheck for the male baby data.");
+    int searchForRank=2380;
+    puts(" ");
+    if(!searchRank(brlhead, searchForRank)) puts("There is no baby name with this rank.");
+    puts("\nCheck for the female baby data.");
+    if(!searchRank(grlhead, searchForRank)) puts("There is no baby name with this rank.");
 	//printf("counting is %d\n", counting);
 	return 0;
 	fclose(fp);
 }
 
-void print(DNode *res){
-	printf("%s : total rank(%d), totla count(%d) \nHistogram---------------------------\n", res->name, res->trank, res->totalcount);
-	YearNode *handle = res->yearPointer;
-	while(handle!=NULL){
-		printf("%d ", handle->year);
-		int n = (handle->count)/300;
-		while (n--) putchar('.');
-		
-		printf("%d(%d)\n", handle->count, handle->rank);
-		handle=handle->next;
-	}
-}
 
-void searchRank(BRL *brlhead, int num){
-	BRL *handle=brlhead;
-	while(handle!=NULL && handle->data->trank<=num){
-		if(handle->data->trank ==num){
-			printf("%d %s %d \n",handle->data->totalcount, handle->data->name, handle->data->trank );
-		}
-		handle=handle->next;
-	}
-}
+
 
 
 

@@ -28,21 +28,12 @@ struct tagA{
 	struct tagA *next;
 };
 typedef struct tagA BNL;
-BNL *bnlhead = NULL;
-BNL *bnltail= NULL;
-BNL *gnlhead = NULL;
-BNL *gnltail= NULL;
-
 
 struct tagB{
 	DNode *data;
 	struct tagA *next;
 };
 typedef struct tagA BRL;
-BRL *brlhead = NULL;
-BRL *brltail= NULL;
-BRL *grlhead = NULL;
-BRL *grltail= NULL;
 
 struct TNode{
     BNL *data;
@@ -52,7 +43,16 @@ struct TNode{
 typedef struct TNode BNT;
 
 
+BRL *brlhead ;
+BRL *brltail;
+BRL *grlhead ;
+BRL *grltail;
+BNL *bnlhead ;
+BNL *bnltail;
+BNL *gnlhead ;
+BNL *gnltail;
 
+int searchRank(BRL *brlhead, int num);
 BNT* constructorTree(BNL *data);
 void inOrdTreeTrans(BNT* node);
 BNL* constructorBNL (DNode *data);
