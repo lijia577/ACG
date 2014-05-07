@@ -7,10 +7,10 @@
 
 
 int main(){
+
 	int year=1900;
 	FILE *fp;
 	char str[30],line[60];
-	
 	char boyname[30];
 	char girlname[30];
 	int localrank;
@@ -42,14 +42,14 @@ int main(){
 		}//end of else
 	}//enf of while year	
 		
-	printf("pCount is %d",pCount);
-	puts("Name should be in alpaphetical order");
+	//printf("pCount is %d",pCount);
+	//puts("Name should be in alpaphetical order");
 	//printBNL(bnlhead);
-	puts("");
+	//puts("");
 	//printBNL(gnlhead);
-	puts("----------------------");
+	//puts("----------------------");
 	
-	puts("Rank should be in order");
+	//puts("Rank should be in order");
 	BNLtoBRLconverter(bnlhead, &brlhead);
 	BNLtoBRLconverter(gnlhead, &grlhead);
 	rankBRL(brlhead);
@@ -68,13 +68,13 @@ int main(){
 	
 	
 	//this is BST search
-	puts("\nHere comes the BT search");
-	char s[20]="Willy";
+	//puts("\nHere comes the BT search");
+	char s[20]="Sd";
 	DNode *res=BSTsearch(&bRoot,s);
 	if(res==NULL) printf("%s does not exist in any file.\n", s);
 	else print(res);
-	puts("*");
-	char g[20]="Eden";
+	puts("\n");
+	char g[20]="Alyssa";
 	DNode *gre=BSTsearch(&gRoot,g);
 	if(gre==NULL) printf("%s does not exist in any file.", g);
 	else print(gre);
@@ -82,8 +82,8 @@ int main(){
 	//end of BST search 
 
    //Search with rank
-  	 puts("\nHere comes the Rank search");
-    int searchForRank=1726;
+  	puts("\nHere comes the Rank search");
+    int searchForRank=1;
     puts("boy");
     searchRank(brlhead, searchForRank);
     puts("girl");
@@ -97,7 +97,11 @@ void print(DNode *res){
 	printf("%s : total rank(%d), totla count(%d) \nHistogram---------------------------\n", res->name, res->trank, res->totalcount);
 	YearNode *handle = res->yearPointer;
 	while(handle!=NULL){
-		printf("%d     %d(%d)\n", handle->year, handle->count, handle->rank);
+		printf("%d ", handle->year);
+		int n = (handle->count)/300;
+		while (n--) putchar('.');
+		
+		printf("%d(%d)\n", handle->count, handle->rank);
 		handle=handle->next;
 	}
 }

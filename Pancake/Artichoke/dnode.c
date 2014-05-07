@@ -74,7 +74,7 @@ BNL* isInList(BNL *bnlhead, char *name){
 void printBNL(BNL *bnlhead){
 	BNL *handle=bnlhead;
 	while(handle!=NULL){
-		printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
+		//printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
 		handle=handle->next;
 	}
 }
@@ -105,14 +105,14 @@ void rankBRL(BRL *brlhead){
 	int prevCount=brlhead->data->totalcount;
 	
 	while(handle!=NULL){
-		printf("%s: total count is: %d ",handle->data->name,handle->data->totalcount);
+		//printf("%s: total count is: %d ",handle->data->name,handle->data->totalcount);
 		if(prevCount!=handle->data->totalcount) rank++;
 		
 		handle->data->trank=rank;
 		prevCount=handle->data->totalcount;
 		handle=handle->next;
 		//rank++;
-		printf("rank is: %d\n",rank);
+		//printf("rank is: %d\n",rank);
 	}
 }
 
