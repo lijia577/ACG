@@ -1,56 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#define NAME_LEN 20
-
-struct totalRank {
-	//Hold the total rank for each baby, used once for a baby,links to the year rank
-	int trank; //total rank
-	char name[NAME_LEN+1];
-	int totalcount; //total count
-	struct yearRank *yearPointer;
-};
-typedef struct totalRank DNode;
-
-
-struct yearRank {
-	//Structure to hold the year rank for each individual
-	int year;
-	int rank;
-	int count;
-	struct yearRank *next;
-};
-typedef struct yearRank YearNode;
-
-
-struct tagA{
-	DNode *data;
-	struct tagA *next;
-};
-typedef struct tagA BNL;
-
-BNL *bnlhead = NULL;
-BNL *bnltail= NULL;
-
-
-struct tagB{
-	DNode *data;
-	struct tagA *next;
-};
-typedef struct tagA BRL;
-
-BRL *brlhead = NULL;
-BRL *brltail= NULL;
-
-struct TNode{
-    BNL *data;
-    struct TNode* left;
-    struct TNode* right;
-};
-typedef struct TNode BNT;
-
-
-//----------------------------------------
+#include"dnode.h"
 
 BNT* constructorTree(BNL *data){
     BNT* node;
@@ -119,37 +70,7 @@ BNL* isInList(BNL *bnlhead, char *name){
 
 
 
-void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
-	BNL *current;
-	//special head case
-	if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
-        new_node->next = *bnlhead;
-        *bnlhead = new_node;
-    }else if(  strcmp( (*bnlhead)->data->name, new_node->data->name)==0   ){
-    	//puts("same + update");
-    	((*bnlhead)->data->totalcount)+=(new_node->data->totalcount);
-    	return;
-    }else{
-        /* Locate the node before the point of insertion */
-        current = *bnlhead;
-        while (current->next!=NULL &&  (strcmp(current->next->data->name, new_node->data->name)<=0) ){
-            if(strcmp( current->next->data->name,  new_node->data->name)==0 ){
-        		//puts("same & update");
-        		(current->next->data->totalcount)+=(new_node->data->totalcount);
-        		return;
-       		}
-       		//puts("sd");
-            current = current->next;
-            
-        }
-       
-        new_node->next = current->next;
-        current->next = new_node;
-    }
-}
-
-
-void printBNL(){
+void printBNL(BNL *bnlhead){
 	BNL *handle=bnlhead;
 	while(handle!=NULL){
 		printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
@@ -177,19 +98,23 @@ void insertInOrderBRL(BRL **brlhead, BRL *new_node){
     }
 }
 
-void printBRL(){
+void rankBRL(BRL *brlhead){
 	BRL *handle=brlhead;
-	int count=1;
+	int rank=1;
+	int prevCount=brlhead->data->totalcount;
+	
 	while(handle!=NULL){
-		printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
-		handle->data->trank=count;
-		count++;
+		printf("%s: total count is: %d ",handle->data->name,handle->data->totalcount);
+		if(prevCount!=handle->data->totalcount) rank++;
+		handle->data->trank=rank;
+		prevCount=handle->data->totalcount;
 		handle=handle->next;
+		printf("rank is: %d\n",rank);
 	}
 }
 
 //construct BRL
-void BNLtoBRLconverter(){
+void BNLtoBRLconverter(BNL *bnlhead){
 	BNL *handle= bnlhead;
 	int count=1;
 	
@@ -280,7 +205,7 @@ DNode* BSTsearch(BNT ** root, char *str){
 	if(strcmp(str,(*root)->data->data->name)<0 ) {
 		BSTsearch(&((*root)->left), str);
 	}else if(strcmp(str,(*root)->data->data->name)>0 ) {
-		BSTsearch(&((*root)->left), str);
+		BSTsearch(&((*root)->right), str);
 	}else{
 		return (*root)->data->data;
 	}
@@ -302,7 +227,11 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 	if(temp!=NULL){//name is already on the list
 		(temp->data->totalcount) += (aNode->count);
 		appendYearNode(&(temp->data->yearPointer), aNode);
+		printf("Name is on list %s \n", temp->data->name);
+		
 	}else{//the name is new to the list
+		printf("Name is NOT on list %s \n", boyname);
+		
 		DNode *anotherNode = DNodeConstructor(aNode, boynum ,boyname);
 		BNL *new_node=constructorBNL(anotherNode);
 		//case where insertion happens before head.
@@ -320,4 +249,36 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 	}
 	
 }
+
+/*
+
+void insertInOrderBNL(BNL **bnlhead, BNL *new_node, YearNode *aNode){
+	BNL *current;
+	//special head case
+	if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>0 ){
+        new_node->next = *bnlhead;
+        *bnlhead = new_node;
+    }else if(  strcmp( (*bnlhead)->data->name, new_node->data->name)==0   ){
+    	//puts("same + update");
+    	((*bnlhead)->data->totalcount)+=(new_node->data->totalcount);
+    	return;
+    }else{
+        
+        current = *bnlhead;
+        while (current->next!=NULL &&  (strcmp(current->next->data->name, new_node->data->name)<=0) ){
+            if(strcmp( current->next->data->name,  new_node->data->name)==0 ){
+        		//puts("same & update");
+        		(current->next->data->totalcount)+=(new_node->data->totalcount);
+        		return;
+       		}
+       		//puts("sd");
+            current = current->next;
+            
+        }
+       
+        new_node->next = current->next;
+        current->next = new_node;
+    }
+}
+*/
 
