@@ -1,5 +1,6 @@
 #include"dnode.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void print(DNode *res){
 	printf("%s : total rank(%d), totla count(%d) \nHistogram---------------------------\n", res->name, res->trank, res->totalcount);
@@ -13,4 +14,10 @@ void print(DNode *res){
 		handle=handle->next;
 	}
 	puts("");
+}
+
+void usage(){
+	puts("Option is invalid, remember to provide either rank or name, or both. ");
+	printf("Usage: proj8.out [-g gender] [-r rank] [-n name]\n");
+	exit(2);
 }

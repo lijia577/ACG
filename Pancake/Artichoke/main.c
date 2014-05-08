@@ -1,11 +1,12 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<getopt.h>
 #include"main.h"
 #include"dnode.h"
 #include"io.h"
 
-int main(){
+int main(int argc, char **argv){
 
 	int year=1900;
 	FILE *fp;
@@ -17,6 +18,64 @@ int main(){
 	int girlnum;
 	
 	int pCount=0;
+	
+	
+	extern char *optarg;
+	int nflag=0;
+	int rflag=0;
+	
+	char gender[20]={0};
+	int sex=0;
+	char inputName[20]={0};
+	int inputRank=0;
+	
+	if(argc <2) usage();
+	int option;
+	while ((option = getopt(argc, argv, "g::r::n::")) != -1){
+		switch (option) {
+		case 'g':
+			//puts("Gender");
+			//printf("optarg : %s \n", optarg);
+			//printf("Gender is :%s\n", optarg);
+			strcpy(gender, optarg);
+			break;
+		case 'r':
+			//puts("Rank");
+			rflag++;
+			inputRank=atoi(optarg);
+			break;
+	
+		case 'n':
+			//puts("Name");
+			//printf("Name is :%s\n", optarg);
+			strcpy(inputName, optarg);
+			nflag++;
+			break;
+		
+		default:
+			usage();
+			
+		}
+		
+	}
+	if(nflag==0 && rflag ==0) {puts("sdf");usage();}
+	
+	
+	if(strlen(gender)==0) ; //puts("No Gender");
+	else if(gender[0]!='m'&& gender[0]!='M'&& gender[0]!='f'&& gender[0]!='F'){
+		puts("Invalid Gender input, use F or M. \nSee you next time!~~");
+		exit(0);
+	}
+	
+	if(rflag!=0 && inputRank <=0){
+		puts("Invalid input rank. Rank should be non-negative number!\nSee you next time!~~");
+		exit(0);
+	}
+	
+	if(gender[0]=='m'||gender[0]=='M') sex=1;
+	else if(gender[0]=='f'||gender[0]=='F') sex=2;
+	
+	printf("Inputs: name is: %s, gender is:%c, rank is %d, gender code is %d\n",inputName, gender[0], inputRank, sex);
 	
 
 	while(year<2015){
@@ -69,37 +128,46 @@ int main(){
 	//this is BST search
 	//puts("\nHere comes the BT search");
 	
-	
-	char s[20]="Sd";
-	DNode *res=BSTsearch(&bRoot,s);
-	if(res==NULL) printf("%s does not exist in any file.\n", s);
-	else print(res);
-	puts("\n");
-	
-	
-	
-	char g[20]="Alyssa";
-	DNode *gre=BSTsearch(&gRoot,g);
-	if(gre==NULL) printf("%s does not exist in any file.", g);
-	else print(gre);
-	
+	if(strlen(inputName)!=0){
+		if(sex==0){
+			puts("checking male");
+			treeNameSearch(inputName, &bRoot);
+			puts("checking female");
+			treeNameSearch(inputName, &gRoot);
+		}else if(sex==1){
+			treeNameSearch(inputName, &bRoot);
+		}else if(sex==2){
+			treeNameSearch(inputName, &gRoot);
+		}
+		
+	}
 	//end of BST search 
 
    //Search with rank
-    
-  	puts("\nCheck for the male baby data.");
-    int searchForRank=2380;
-    puts(" ");
-    if(!searchRank(brlhead, searchForRank)) puts("There is no baby name with this rank.");
-    
-    
-    puts("\nCheck for the female baby data.");
-    if(!searchRank(grlhead, searchForRank)) puts("There is no baby name with this rank.");
-	//printf("counting is %d\n", counting);
+    if(inputRank>0){
+    	if(sex==0){
+			puts("\nCheck for the male baby data.");
+   		 	if(!searchRank(brlhead, inputRank)) puts("There is no baby name with this rank.");
+   		 	 puts("\nCheck for the female baby data.");
+   			 if(!searchRank(grlhead, inputRank)) puts("There is no baby name with this rank.");
+		}else if(sex==1){
+			if(!searchRank(brlhead, inputRank)) puts("There is no baby name with this rank.");
+		}else if(sex==2){
+			if(!searchRank(grlhead, inputRank)) puts("There is no baby name with this rank.");
+		}
+    }//end rank
+
 	return 0;
-	fclose(fp);
+	//fclose(fp);
 }
 
+void treeNameSearch(char *name, BNT **root){
+	DNode *res=BSTsearch(root,name);
+	if(res==NULL) printf("%s does not exist in any file.\n", name);
+		else print(res);
+		puts("\n");
+
+}
 
 
 

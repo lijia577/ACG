@@ -7,5 +7,6 @@
 #include <string.h>
 #include "dnode.h"
 
+void treeNameSearch(char *name, BST **root);
 
 #endif
