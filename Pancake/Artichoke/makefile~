@@ -1,5 +1,5 @@
 proj8: main.o io.o dnode.o
-	gcc main.o io.o dnode.o -o proj8 -std=c99
+	gcc main.o io.o dnode.o -o  proj8 -Werror -W -std=c99
 
 main.o: main.c
 	gcc -c main.c -std=c99

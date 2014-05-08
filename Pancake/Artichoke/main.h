@@ -7,9 +7,12 @@
 #include <string.h>
 #include "dnode.h"
 
+int nflag, rflag;
+
 void treeNameSearch(char *name, BNT **root);
 void freeTree(BNT* node);
 void freeAleaf(BNT *leaf);
-void freeList(BNL *head);
+void freeList(NL *head);
+void checking(char *gender, int *sex,int inputRank);
 
 #endif

@@ -4,7 +4,7 @@
 #include"dnode.h"
 #include"io.h"
 
-BNT* constructorTree(BNL *data){
+BNT* constructorTree(NL *data){
     BNT* node;
   	if( ( node = (BNT*) malloc(sizeof(BNT)+1) )!=NULL){
     	node->data = data;
@@ -18,9 +18,9 @@ BNT* constructorTree(BNL *data){
 }
 
 
-BNL* constructorBNL (DNode *data){
-	BNL *newList;
-	if( ( newList = (BNL*) malloc(sizeof(BNL)+1 ) )!=NULL){
+NL* constructorNL (DNode *data){
+	NL *newList;
+	if( ( newList = (NL*) malloc(sizeof(NL)+1 ) )!=NULL){
 		newList->data= data;
 		newList->next=NULL;
 	}else{
@@ -31,19 +31,8 @@ BNL* constructorBNL (DNode *data){
 }
 
 
-BRL* constructorBRL (DNode *data){
-	BRL *newList;
-	if( ( newList = (BRL*) malloc(sizeof(BRL)+1) )!=NULL){
-		newList->data= data;
-		newList->next=NULL;
-	}else{
-		printf("Mem loc error\n");
-		exit(0);
-	}
-	return newList;
-}
 
-void appendBRL(BRL *p){
+void appendNL(NL *p){
 	if(brlhead==NULL){
 		brlhead=p;
 		brltail=p;
@@ -53,8 +42,8 @@ void appendBRL(BRL *p){
 	}
 }
 
-BNL* isInList(BNL *bnlhead, char *name){
-	BNL *handle=bnlhead;
+NL* isInList(NL *bnlhead, char *name){
+	NL *handle=bnlhead;
 	while(handle!=NULL){
 		if(strcmp(handle->data->name,name)==0) return handle;
 		handle=handle->next;
@@ -64,8 +53,8 @@ BNL* isInList(BNL *bnlhead, char *name){
 
 
 
-void printBNL(BNL *bnlhead){
-	BNL *handle=bnlhead;
+void printNL(NL *bnlhead){
+	NL *handle=bnlhead;
 	while(handle!=NULL){
 		//printf("%s-, total count is: %d \n",handle->data->name,handle->data->totalcount);
 		handle=handle->next;
@@ -80,8 +69,8 @@ void inOrdTreeTrans(BNT* node){
     inOrdTreeTrans(node->right);
 }
 
-void insertInOrderBRL(BRL **brlhead, BRL *new_node){
-	BRL *current;
+void insertInOrderBRL(NL **brlhead, NL *new_node){
+	NL *current;
 	if (*brlhead == NULL || ((*brlhead)->data->totalcount <new_node->data->totalcount) ){
         new_node->next = *brlhead;
         *brlhead = new_node;
@@ -98,8 +87,8 @@ void insertInOrderBRL(BRL **brlhead, BRL *new_node){
     }
 }
 
-void rankBRL(BRL *brlhead){
-	BRL *handle=brlhead;
+void rankRL(NL *brlhead){
+	NL *handle=brlhead;
 	int rank=1;
 	int pRank=1;
 	int c=1;
@@ -122,12 +111,12 @@ void rankBRL(BRL *brlhead){
 }
 
 //construct BRL
-void BNLtoBRLconverter(BNL *bnlhead, BNL **brlhead){
-	BNL *handle= bnlhead;
+void NLtoRLconverter(NL *bnlhead, NL **brlhead){
+	NL *handle= bnlhead;
 	int count=1;
 	
 	while(handle!=NULL){
-		insertInOrderBRL(brlhead,constructorBRL(handle->data));
+		insertInOrderBRL(brlhead,constructorNL(handle->data));
 		handle=handle->next;
 		count++;
 	}
@@ -165,9 +154,9 @@ YearNode* YearNodeConstructor(int year, int localrank, int boynum){
 }
 
 
-int countLNodes(BNL *bnlhead){
+int countLNodes(NL *bnlhead){
     int count = 0;
-    BNL *temp = bnlhead;
+    NL *temp = bnlhead;
     while(temp)
     {
         temp = temp->next;
@@ -177,7 +166,7 @@ int countLNodes(BNL *bnlhead){
 }
 
 
-BNT* sortedListToBSTRecur(BNL **head_ref, int n){
+BNT* sortedListToBSTRecur(NL **head_ref, int n){
     /* Base Case */
     if (n <= 0)
         return NULL;
@@ -202,7 +191,7 @@ BNT* sortedListToBSTRecur(BNL **head_ref, int n){
 }
  
  
-BNT* sortedListToBST(BNL *bnlhead){
+BNT* sortedListToBST(NL *bnlhead){
     
     int n = countLNodes(bnlhead);
     return sortedListToBSTRecur(&bnlhead, n);
@@ -227,11 +216,11 @@ void appendYearNode(YearNode **p, YearNode *aNode){
 	handle->next=aNode;
 }
 
-void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *boyname){
+void sortedInsertNL(NL **bnlhead, int year, int  localrank, int boynum, char *boyname){
 
 	YearNode *aNode = YearNodeConstructor(year, localrank,  boynum);
-	BNL *temp=isInList(*bnlhead,boyname);
-	BNL *current;
+	NL *temp=isInList(*bnlhead,boyname);
+	NL *current;
 	
 	if(temp!=NULL){//name is already on the list
 		(temp->data->totalcount) += (aNode->count);
@@ -242,7 +231,7 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 		//printf("Name is NOT on list %s \n", boyname);
 		
 		DNode *anotherNode = DNodeConstructor(aNode, boynum ,boyname);
-		BNL *new_node=constructorBNL(anotherNode);
+		NL *new_node=constructorNL(anotherNode);
 		//case where insertion happens before head.
 		if (*bnlhead == NULL || strcmp((*bnlhead)->data->name,new_node->data->name)>=0 ){
        		new_node->next = *bnlhead;
@@ -260,9 +249,9 @@ void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *
 }
 
 
-int searchRank(BRL *brlhead, int num){
+int searchRank(NL *brlhead, int num){
 int res=0;
-	BRL *handle=brlhead;
+	NL *handle=brlhead;
 	while(handle!=NULL && handle->data->trank<=num){
 		if(handle->data->trank ==num){
 			res=1;

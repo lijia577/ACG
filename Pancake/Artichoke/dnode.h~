@@ -27,49 +27,52 @@ struct tagA{
 	DNode *data;
 	struct tagA *next;
 };
-typedef struct tagA BNL;
+typedef struct tagA NL;
 
-struct tagB{
-	DNode *data;
-	struct tagA *next;
-};
-typedef struct tagA BRL;
+
 
 struct TNode{
-    BNL *data;
+    NL *data;
     struct TNode* left;
     struct TNode* right;
 };
 typedef struct TNode BNT;
 
 
-BRL *brlhead ;
-BRL *brltail;
-BRL *grlhead ;
-BRL *grltail;
-BNL *bnlhead ;
-BNL *bnltail;
-BNL *gnlhead ;
-BNL *gnltail;
+NL *brlhead ;
+NL *brltail;
+NL *grlhead ;
+NL *grltail;
+NL *bnlhead ;
+NL *bnltail;
+NL *gnlhead ;
+NL *gnltail;
 
-int searchRank(BRL *brlhead, int num);
-BNT* constructorTree(BNL *data);
+int searchRank(NL *head, int num);
+
+void appendNL(NL *p);
+void insertInOrderRL(NL **head, NL *new_node);
+void rankRL(NL *head);
+
+
+void NLtoRLconverter(NL *head, NL **anotherhead);
+
+
+BNT* constructorTree(NL *data);
 void inOrdTreeTrans(BNT* node);
-BNL* constructorBNL (DNode *data);
-BRL* constructorBRL (DNode *data);
-void appendBRL(BRL *p);
-BNL* isInList(BNL *bnlhead, char *name);
-void printBNL(BNL *bnlhead);
-void insertInOrderBRL(BRL **brlhead, BRL *new_node);
-void rankBRL(BRL *brlhead);
-void BNLtoBRLconverter(BNL *bnlhead, BRL **brlhead);
+NL* constructorNL (DNode *data);
+NL* isInList(NL *head, char *name);
+void printNL(NL *head);
+int countLNodes(NL *head);
+
 DNode* DNodeConstructor(YearNode *aNode, int boynum, char *boyname);
 YearNode* YearNodeConstructor(int year, int localrank, int boynum);
-int countLNodes(BNL *bnlhead);
-BNT* sortedListToBSTRecur(BNL **head_ref, int n);
-BNT* sortedListToBST(BNL *bnlhead);
+
 DNode* BSTsearch(BNT ** root, char *str);
-void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *boyname);
+BNT* sortedListToBSTRecur(NL **head, int n);
+BNT* sortedListToBST(NL *head);
+
+void sortedInsertNL(NL **head, int year, int  localrank, int boynum, char *boyname);
 
 #endif 
 

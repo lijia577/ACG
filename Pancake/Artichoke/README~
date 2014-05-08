@@ -1,0 +1,78 @@
+CS 246 Project 8
+Name: Jia Li
+Email: jli01@brynmawr.edu
+
+BREIF DESCRIPTION
+	This program helps users to visualize a baby name data set ranging
+	from 1900-2013. Users will be able to query the data set and visu-
+	alize it with histograms. Users can choose to query by name and/or
+	by total ranking. 
+
+HOW TO RUN:
+
+	open your terminal and do the following:
+		$ make
+		$ ./proj8  [-gGENDER] [-rRank] [-nName]
+	
+	
+	NOTE the order of flags are interchangable. You need to have either
+	-r or -n at least. Otherwise the program will yell at you. You might
+	want to follow the prompt or refer to the following examples. If you
+	don't specify the gender, the program will return both gender.
+	
+		./proj8 -nEden -r20      ---------- Good, with -g Omitted
+		./proj8 -r20 -nEden -gF  ---------- Good
+		./proj8 -r20			 ---------- Good	
+    
+
+
+Questions answered:
+
+1. what data structure you use for building index on total ranks?
+
+	A: I used a singly linked list to build total ranks index. To be 
+	more specific, I obtained the list to store names and converted 
+	it to total ranks. The head nodes of the list are called brlhead
+	(stands for boy rank list) and grlhead (stands for girl rank list).
+	
+2. what data structure you use for building index on names? 
+
+	A: I also used a singly list for that. Again, the naming convention
+	of head node in this program is gnlhead(girl name list) and bnlhead 
+	(boy name list). 
+	
+3. what is the complexity of searching by name for your program?
+	
+	A: The complexity of searching by name is O(logN). Because the singly
+	list described in question 1 is converted into a balanced search tree,
+	where search is done in O(logN) time.
+
+4. what is the complexity of searching by rank for your program?
+
+	A: The complexity of searching by rank is O(N). I used singly linked 
+	list, where search only requires at more O(N), because there are only
+	N elements that needs to be iterated. 
+	
+5. what algorithm you use for freeing memories?
+
+	A: For trees, I used recursion to free memories. For linkedlist, I start
+	at the head, traverse the entire list. I free the current node but saved
+	the pointer to the next and etc.
+	
+6. how to run your program? 
+
+	A: Follow the instructions below, use flags to specify different options:
+	$ make
+	$ ./proj8 [-gGENDER] [-rRank] [-nName]
+	
+	(Note that the order of flags does not matter. No space are allowed between
+	a certain flag and its argument. For example:
+	$./proj8 -nEmily -r20    ------is correct, with gender ommited.
+	$./proj8 -nEden -gF -r20 ------is correct.
+	$./proj8 -n Emily        ------is NOT correct. The space means name is empty.)
+	
+7. what a user should expect from your program.
+	
+	A: A user should follow the prompt when entering flags and runing the 
+	program. A user will be able to query and visualization the babynames
+	dataset with a histogram by using rank flag (-r) and/or name flag(-n). 
