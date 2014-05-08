@@ -155,7 +155,7 @@ void freeAleaf(BNT *leaf){
 		free(temp);
 	}
 	free(leaf->data->data);
-	free(leaf->data);//=NULL;
+	free(leaf->data);
 	free(leaf);
 }
 

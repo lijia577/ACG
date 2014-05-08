@@ -53,22 +53,29 @@ BNL *gnlhead ;
 BNL *gnltail;
 
 int searchRank(BRL *brlhead, int num);
+BRL* constructorBRL (DNode *data);
+void appendBRL(BRL *p);
+void insertInOrderBRL(BRL **brlhead, BRL *new_node);
+void rankBRL(BRL *brlhead);
+
+
+void BNLtoBRLconverter(BNL *bnlhead, BRL **brlhead);
+
+
 BNT* constructorTree(BNL *data);
 void inOrdTreeTrans(BNT* node);
 BNL* constructorBNL (DNode *data);
-BRL* constructorBRL (DNode *data);
-void appendBRL(BRL *p);
 BNL* isInList(BNL *bnlhead, char *name);
 void printBNL(BNL *bnlhead);
-void insertInOrderBRL(BRL **brlhead, BRL *new_node);
-void rankBRL(BRL *brlhead);
-void BNLtoBRLconverter(BNL *bnlhead, BRL **brlhead);
+int countLNodes(BNL *bnlhead);
+
 DNode* DNodeConstructor(YearNode *aNode, int boynum, char *boyname);
 YearNode* YearNodeConstructor(int year, int localrank, int boynum);
-int countLNodes(BNL *bnlhead);
+
+DNode* BSTsearch(BNT ** root, char *str);
 BNT* sortedListToBSTRecur(BNL **head_ref, int n);
 BNT* sortedListToBST(BNL *bnlhead);
-DNode* BSTsearch(BNT ** root, char *str);
+
 void sortedInsertBNL(BNL **bnlhead, int year, int  localrank, int boynum, char *boyname);
 
 #endif 
