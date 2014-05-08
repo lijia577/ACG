@@ -8,5 +8,8 @@
 #include "dnode.h"
 
 void treeNameSearch(char *name, BNT **root);
+void freeTree(BNT* node);
+void freeAleaf(BNT *leaf);
+void freeBNL(BNL *head);
 
 #endif

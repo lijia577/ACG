@@ -6,7 +6,7 @@
 
 BNT* constructorTree(BNL *data){
     BNT* node;
-  	if( ( node = (BNT*) malloc(sizeof(BNT)) )!=NULL){
+  	if( ( node = (BNT*) malloc(sizeof(BNT)+1) )!=NULL){
     	node->data = data;
     	node->left = NULL;
    		node->right = NULL;
@@ -17,17 +17,10 @@ BNT* constructorTree(BNL *data){
     return node;
 }
 
-void inOrdTreeTrans(BNT* node){
-    if (node == NULL) return;
-    inOrdTreeTrans(node->left);
-    printf("%s ", node->data->data->name);
-    inOrdTreeTrans(node->right);
-}
-
 
 BNL* constructorBNL (DNode *data){
 	BNL *newList;
-	if( ( newList = (BNL*) malloc(sizeof(BNL)) )!=NULL){
+	if( ( newList = (BNL*) malloc(sizeof(BNL)+1 ) )!=NULL){
 		newList->data= data;
 		newList->next=NULL;
 	}else{
@@ -40,7 +33,7 @@ BNL* constructorBNL (DNode *data){
 
 BRL* constructorBRL (DNode *data){
 	BRL *newList;
-	if( ( newList = (BRL*) malloc(sizeof(BRL)) )!=NULL){
+	if( ( newList = (BRL*) malloc(sizeof(BRL)+1) )!=NULL){
 		newList->data= data;
 		newList->next=NULL;
 	}else{
@@ -80,6 +73,12 @@ void printBNL(BNL *bnlhead){
 }
 
 
+void inOrdTreeTrans(BNT* node){
+    if (node == NULL) return;
+    inOrdTreeTrans(node->left);
+    printf("%s ", node->data->data->name);
+    inOrdTreeTrans(node->right);
+}
 
 void insertInOrderBRL(BRL **brlhead, BRL *new_node){
 	BRL *current;
@@ -138,7 +137,7 @@ void BNLtoBRLconverter(BNL *bnlhead, BNL **brlhead){
 
 DNode* DNodeConstructor(YearNode *aNode, int boynum, char *boyname){
 	DNode *newList;
-	if( ( newList = (DNode*) malloc(sizeof(DNode)) )!=NULL){
+	if( ( newList = (DNode*) malloc(sizeof(DNode)+1) )!=NULL){
 		newList->trank = 0;
 		strcpy(newList->name,boyname);
 		newList->totalcount = boynum;
@@ -153,7 +152,7 @@ DNode* DNodeConstructor(YearNode *aNode, int boynum, char *boyname){
 
 YearNode* YearNodeConstructor(int year, int localrank, int boynum){
 	YearNode *newList;
-	if( ( newList = (YearNode*) malloc(sizeof(YearNode)) )!=NULL){
+	if( ( newList = (YearNode*) malloc(sizeof(YearNode)+1) )!=NULL){
 		newList->year = year;
 		newList->rank = localrank;
 		newList->count= boynum;

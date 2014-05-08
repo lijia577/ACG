@@ -129,10 +129,46 @@ int main(int argc, char **argv){
 		}
     }//end rank
 
+	freeTree(bRoot);
+	freeTree(gRoot);
 	return 0;
-	//fclose(fp);
+	
+	
+	
+}//end main
+
+void freeTree(BNT* node){
+	if(node){
+		freeTree(node->left);
+		freeTree(node->right);
+		freeAleaf(node);
+	}
 }
 
+void freeAleaf(BNT *leaf){
+	//BNT *handle = leaf;
+	YearNode *node = leaf->data->data->yearPointer;
+	YearNode *temp;
+	while(node!=NULL){
+		temp=node;
+		node=node->next;
+		free(temp);
+	}
+	free(leaf->data->data);
+	free(leaf->data);//=NULL;
+	free(leaf);
+}
+
+void freeList(BNL *head){
+	BNL *node=head;
+	BNL *temp;
+	while(node!=NULL){
+		temp=node;
+		node=node->next;
+		free(temp);
+	}
+	head=NULL;
+}
 void treeNameSearch(char *name, BNT **root){
 	DNode *res=BSTsearch(root,name);
 	if(res==NULL) printf("%s does not exist in any file.\n", name);
