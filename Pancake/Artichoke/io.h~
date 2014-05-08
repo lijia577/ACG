@@ -3,4 +3,5 @@
 #include "dnode.h"
 
 void print(DNode *res);
+void usage();
 #endif

@@ -17,30 +17,22 @@ int main(int argc, char **argv){
 	int boynum;
 	int girlnum;
 	
-	int pCount=0;
-	
-	
 	extern char *optarg;
 	int nflag=0;
 	int rflag=0;
-	
 	char gender[20]={0};
-	int sex=0;
 	char inputName[20]={0};
 	int inputRank=0;
+	int sex=0;
 	
 	if(argc <2) usage();
 	int option;
 	while ((option = getopt(argc, argv, "g::r::n::")) != -1){
 		switch (option) {
 		case 'g':
-			//puts("Gender");
-			//printf("optarg : %s \n", optarg);
-			//printf("Gender is :%s\n", optarg);
-			strcpy(gender, optarg);
+			if(optarg!=NULL) strcpy(gender, optarg);
 			break;
 		case 'r':
-			//puts("Rank");
 			rflag++;
 			inputRank=atoi(optarg);
 			break;
@@ -56,7 +48,6 @@ int main(int argc, char **argv){
 			usage();
 			
 		}
-		
 	}
 	if(nflag==0 && rflag ==0) {puts("sdf");usage();}
 	
@@ -91,7 +82,6 @@ int main(int argc, char **argv){
 		else{
 			while(fgets(line,60,fp)!=0){
 				sscanf(line,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
-				pCount++;
 				sortedInsertBNL( &bnlhead,  year,   localrank,  boynum,  boyname);
 				sortedInsertBNL( &gnlhead,  year,   localrank,  girlnum, girlname);
 			}//end while
@@ -100,33 +90,15 @@ int main(int argc, char **argv){
 		}//end of else
 	}//enf of while year	
 		
-	//printf("pCount is %d",pCount);
-	//puts("Name should be in alpaphetical order");
-	//printBNL(bnlhead);
-	//puts("");
-	//printBNL(gnlhead);
-	//puts("----------------------");
-	
-	//puts("Rank should be in order");
+
 	BNLtoBRLconverter(bnlhead, &brlhead);
 	BNLtoBRLconverter(gnlhead, &grlhead);
 	rankBRL(brlhead);
 	rankBRL(grlhead);
 	
-	//puts("------------------");
 	BNT *bRoot = sortedListToBST(bnlhead);
 	BNT *gRoot = sortedListToBST(gnlhead);
-	//printf("\nIn order transversal of tree: ");
-	//inOrdTreeTrans(bRoot);
-	//puts("");
 	
-	//printf("\nIn order transversal of tree: ");
-	//inOrdTreeTrans(gRoot);
-	//puts("");
-	
-	
-	//this is BST search
-	//puts("\nHere comes the BT search");
 	
 	if(strlen(inputName)!=0){
 		if(sex==0){
