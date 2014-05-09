@@ -1,0 +1,11 @@
+proj8: main.o io.o dnode.o
+	gcc main.o io.o dnode.o -o  proj8 -Werror -W -Wall -std=c99
+
+main.o: main.c
+	gcc -c main.c -std=c99
+
+io.o: io.c 
+	gcc -c io.c -std=c99
+
+dnode.o: dnode.c 
+	gcc -c dnode.c -std=c99

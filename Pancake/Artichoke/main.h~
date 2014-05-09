@@ -7,6 +7,7 @@
 #include <string.h>
 #include "dnode.h"
 
+//two flags are used to prevent trivial command line args.
 int nflag, rflag;
 
 void treeNameSearch(char *name, BNT **root);

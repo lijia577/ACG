@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//print out result given a DNode
 void print(DNode *res){
 	printf("%s : total rank(%d), totla count(%d) \nHistogram---------------------------\n", res->name, res->trank, res->totalcount);
 	YearNode *handle = res->yearPointer;
@@ -16,6 +17,7 @@ void print(DNode *res){
 	puts("");
 }
 
+//prompt message
 void usage(){
 	puts("Option is invalid, remember to provide either rank or name, or both. ");
 	printf("Usage: proj8.out [-g gender] [-r rank] [-n name]\n");

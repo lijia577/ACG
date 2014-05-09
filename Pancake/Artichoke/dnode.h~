@@ -22,15 +22,14 @@ struct yearRank {
 };
 typedef struct yearRank YearNode;
 
-
+//Singly linked list 
 struct tagA{
 	DNode *data;
 	struct tagA *next;
 };
 typedef struct tagA NL;
 
-
-
+//Tree
 struct TNode{
     NL *data;
     struct TNode* left;
@@ -38,7 +37,7 @@ struct TNode{
 };
 typedef struct TNode BNT;
 
-
+//different lists used 
 NL *brlhead ;
 NL *brltail;
 NL *grlhead ;
@@ -50,7 +49,7 @@ NL *gnltail;
 
 int searchRank(NL *head, int num);
 
-void appendNL(NL *p);
+
 void insertInOrderRL(NL **head, NL *new_node);
 void rankRL(NL *head);
 
@@ -59,7 +58,7 @@ void NLtoRLconverter(NL *head, NL **anotherhead);
 
 
 BNT* constructorTree(NL *data);
-void inOrdTreeTrans(BNT* node);
+
 NL* constructorNL (DNode *data);
 NL* isInList(NL *head, char *name);
 void printNL(NL *head);

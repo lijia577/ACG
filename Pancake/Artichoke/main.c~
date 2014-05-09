@@ -45,19 +45,16 @@ int main(int argc, char **argv){
 	
 	checking(gender,&sex, inputRank); //check if all input are fine
 	
-	printf("Inputs: name is: %s, gender is:%c, rank is %d, gender code is %d\n",inputName, gender[0], inputRank, sex);
-	
 	//main loop
 	while(year<2015){
-		localrank=0; boynum=0; girlnum=0;
-		
-		sprintf(str,"babynames/names%d",year); //babynames/names
+		localrank=0; boynum=0; girlnum=0; //reset stuff
+		sprintf(str,"babynames/names%d",year); //get the right file name
 		fp = fopen(str,"r");
-		
-		if(fp==NULL) year++;
+		if(fp==NULL) year++;//handle gap years
 		else{
 			while(fgets(line,60,fp)!=0){
 				sscanf(line,"%d %s %d %s %d", &localrank, (char *)&boyname, &boynum, (char *)&girlname, &girlnum);
+				//insert into NAME LIST while sorting it.
 				sortedInsertNL( &bnlhead,  year,   localrank,  boynum,  boyname);
 				sortedInsertNL( &gnlhead,  year,   localrank,  girlnum, girlname);
 			}//end while
@@ -66,31 +63,32 @@ int main(int argc, char **argv){
 		}//end of else
 	}//enf of while year	
 		
-
+	//Converting NAME LIST into RANK LIST
 	NLtoRLconverter(bnlhead, &brlhead);
 	NLtoRLconverter(gnlhead, &grlhead);
 	rankRL(brlhead);
 	rankRL(grlhead);
+	
+	//Creating Tree Nodes for boys and girls
 	BNT *bRoot = sortedListToBST(bnlhead);
 	BNT *gRoot = sortedListToBST(gnlhead);
 	
-	
+	//Name Search using binary trees with different conditions;
 	if(strlen(inputName)!=0){
 		if(sex==0){
 			puts("Check for the male baby data.");
 			treeNameSearch(inputName, &bRoot);
-			puts("Check for the male baby data.");
+			puts("Check for the female baby data.");
 			treeNameSearch(inputName, &gRoot);
 		}else if(sex==1){
 			treeNameSearch(inputName, &bRoot);
 		}else if(sex==2){
 			treeNameSearch(inputName, &gRoot);
 		}
-		
 	}
 	//end of BST search 
 
-   //Search with rank
+   //Rank Search using singly linked list with different conditions
     if(inputRank>0){
     	if(sex==0){
 			puts("\nCheck for the male baby data.");
@@ -102,19 +100,22 @@ int main(int argc, char **argv){
 		}else if(sex==2){
 			if(!searchRank(grlhead, inputRank)) puts("There is no baby name with this rank.");
 		}
-    }//end rank
+    }//end rank search
 
+	//free a lot of stuff towards to end of program
 	freeTree(bRoot);
 	freeTree(gRoot);
 	freeList(brlhead);
 	freeList(bnlhead);
 	freeList(grlhead);
 	freeList(gnlhead);
-	return 0;
-	
-	
+	return 0;	
 }//end main
 
+
+//helper functions in main
+
+//given a tree root, free it.
 void freeTree(BNT* node){
 	if(node){
 		freeTree(node->left);
@@ -123,6 +124,7 @@ void freeTree(BNT* node){
 	}
 }
 
+//free a particular node, where is consist a chain of DNode and YearNode
 void freeAleaf(BNT *leaf){
 	//BNT *handle = leaf;
 	YearNode *node = leaf->data->data->yearPointer;
@@ -137,16 +139,7 @@ void freeAleaf(BNT *leaf){
 	free(leaf);
 }
 
-void freeList(NL *head){
-	NL *node=head;
-	NL *temp;
-	while(node!=NULL){
-		temp=node;
-		node=node->next;
-		free(temp);
-	}
-	head=NULL;
-}
+//helper function caller, given a name a node,do the search and print out the result.
 void treeNameSearch(char *name, BNT **root){
 	DNode *res=BSTsearch(root,name);
 	if(res==NULL) printf("The name %s does not exist any file.\n", name);
@@ -155,6 +148,7 @@ void treeNameSearch(char *name, BNT **root){
 
 }
 
+//this function checks whether those command line arguments are passing in meaningful arguments
 void checking(char *gender, int *sex, int inputRank){
 		if(nflag==0 && rflag ==0) usage();
 		if(strlen(gender)==0) ; //puts("No Gender");
@@ -171,8 +165,18 @@ void checking(char *gender, int *sex, int inputRank){
 		if(gender[0]=='m'||gender[0]=='M') *sex=1;
 		else if(gender[0]=='f'||gender[0]=='F') *sex=2;
 }
-	
 
+//Free a list given the head of the list	
+void freeList(NL *head){
+	NL *node=head;
+	NL *temp;
+	while(node!=NULL){
+		temp=node;
+		node=node->next;
+		free(temp);
+	}
+	head=NULL;
+}
 
 
 
